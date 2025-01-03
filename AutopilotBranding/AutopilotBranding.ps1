@@ -77,6 +77,9 @@ reg.exe add "HKLM\TempUser\Software\Microsoft\Windows\CurrentVersion\Explorer\Hi
 Log "Disabling Windows Spotlight for Desktop"
 reg.exe add "HKLM\TempUser\Software\Policies\Microsoft\Windows\CloudContent" /v DisableSpotlightCollectionOnDesktop /t REG_DWORD /d 1 /f | Out-Host
 
+# Left Align Start Button in the default user profile, users can change it if they want
+reg.exe add "HKLM\TempUser\SOFTWARE\Microsoft\Windows\CurrentVersion\Explorer\Advanced" /v TaskbarAl /t REG_DWORD /d 0 /f | Out-Host
+
 reg.exe unload HKLM\TempUser | Out-Host
 
 # STEP 3: Set time zone (if specified)
@@ -204,6 +207,7 @@ if ($config.Config.OEMInfo)
 }
 
 # STEP 13: Enable UE-V
+<#
 Log "Enabling UE-V"
 Enable-UEV
 Set-UevConfiguration -Computer -SettingsStoragePath "%OneDriveCommercial%\UEV" -SyncMethod External -DisableWaitForSyncOnLogon
@@ -211,6 +215,7 @@ Get-ChildItem "$($installFolder)UEV" -Filter *.xml | % {
 	Log "Registering template: $($_.FullName)"
 	Register-UevTemplate -Path $_.FullName
 }
+#>
 
 # STEP 14: Disable network location fly-out
 Log "Turning off network location fly-out"
